@@ -1,56 +1,138 @@
-# Bank Database Query
 
-This project is a simple Java application that connects to a MySQL database and retrieves account details (age, account number, balance) for a given name from the `accdetails` table in the `bank` database.
+# JDBC Project with DAO and User Input
 
-## Prerequisites
+This is a simple JDBC project demonstrating CRUD operations using a Data Access Object (DAO) pattern and user input from the console. The project performs basic operations on a `users` table, including adding, updating, deleting, and displaying user records.
 
-- Java Development Kit (JDK) 8 or higher
-- MySQL Server
-- MySQL Connector/J (JDBC Driver)
+## Project Structure
+
+```
+jdbc-project/
+|-- src/
+|   |-- main/
+|       |-- java/
+|           |-- com/
+|               |-- example/
+|                   |-- dao/
+|                       |-- UserDao.java
+|                   |-- model/
+|                       |-- User.java
+|                   |-- util/
+|                       |-- DbConnection.java
+|                   |-- Main.java
+|-- lib/
+|-- resources/
+|-- build.gradle (if using Gradle)
+|-- pom.xml (if using Maven)
+```
 
 ## Setup
 
-1. **Clone the repository:**
+### Prerequisites
 
-   ```sh
-   git clone https://github.com/yourusername/bank-database-query.git
-   cd bank-database-query
-2.**Add MySQL Connector/J to your project:**
+- JDK 8 or higher
+- Maven or Gradle
+- MySQL database
 
-If you're using Maven, add the following dependency to your pom.xml:
+### Database Setup
 
-<dependency>
-    <groupId>mysql</groupId>
-    <artifactId>mysql-connector-java</artifactId>
-    <version>8.0.26</version> <!-- Update to the latest version if needed -->
-</dependency>
-If you're not using Maven, download the JAR file from the MySQL Connector/J official website and add it to your project's build path.
-Configure Database Connection:
+1. Create a MySQL database and execute the following SQL script to create the `users` table:
 
-3.**Update the database URL, username, and password in the BankDatabaseQuery.java file:**
+    ```sql
+    CREATE TABLE users (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        email VARCHAR(255) NOT NULL,
+        username VARCHAR(255) NOT NULL,
+        password VARCHAR(255) NOT NULL,
+        last_login TIMESTAMP
+    );
+    ```
 
-private static final String DB_URL = "jdbc:mysql://localhost:3306/bank?useSSL=false&allowPublicKeyRetrieval=true"; // Update with your DB URL
-private static final String USER = "yourUsername"; // Update with your DB username
-private static final String PASS = "yourPassword"; // Update with your DB password
+2. Update the database connection details in `DbConnection.java`:
 
-4.**Reconfigure MySQL User (if necessary):**
+    ```java
+    // src/main/java/com/example/util/DbConnection.java
+    private static final String URL = "jdbc:mysql://localhost:3306/your_database";
+    private static final String USER = "your_username";
+    private static final String PASSWORD = "your_password";
+    ```
 
-If you encounter the CLIENT_PLUGIN_AUTH is required error, run the following command in your MySQL server to change the authentication plugin for your user:
+### Project Setup
 
-ALTER USER 'yourUsername'@'localhost' IDENTIFIED WITH mysql_native_password BY 'yourPassword'
+1. Clone the repository:
 
-5.**Running the Application**
+    ```bash
+    git clone https://github.com/yourusername/jdbc-project.git
+    cd jdbc-project
+    ```
 
-Compile the Java Code:
-javac BankDatabaseQuery.java
+2. Add the JDBC library to your project.
 
-Run the Java Application:
+    - **Maven**: Add the following dependency to `pom.xml`:
 
-java BankDatabaseQuery
-The application will print the age, account number, and balance for the specified name.
+        ```xml
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.25</version>
+        </dependency>
+        ```
 
-6.**Contributing**
-Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
+    - **Gradle**: Add the following to `build.gradle`:
 
-**License**
-This project is licensed under the MIT License - see the LICENSE file for details.
+        ```groovy
+        dependencies {
+            implementation 'mysql:mysql-connector-java:8.0.25'
+        }
+        ```
+
+3. Compile and run the project:
+
+    - **Maven**:
+
+        ```bash
+        mvn compile
+        mvn exec:java -Dexec.mainClass="com.example.Main"
+        ```
+
+    - **Gradle**:
+
+        ```bash
+        gradle build
+        gradle run
+        ```
+
+## Usage
+
+Upon running the project, you will be presented with a menu to perform the following operations:
+
+1. Add User
+2. Update User
+3. Delete User
+4. Display User
+5. Display All Users
+6. Exit
+
+Follow the prompts to input user details and perform the desired operations.
+
+## Classes
+
+### `User`
+
+Represents the user entity with fields for ID, name, email, username, password, and last login.
+
+### `UserDao`
+
+Contains CRUD operations for the `users` table.
+
+### `DbConnection`
+
+Handles the database connection.
+
+### `Main`
+
+Contains the main method with a menu to perform CRUD operations using the `UserDao`.
+
+## License
+
+This project is licensed under the MIT License.
